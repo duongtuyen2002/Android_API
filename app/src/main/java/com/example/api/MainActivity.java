@@ -1,12 +1,20 @@
 package com.example.api;
 
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 
 import com.example.api.Adapter.HttpAdapter;
@@ -15,6 +23,7 @@ import com.example.api.Adapter.ShopAdapter;
 import com.example.api.data.remote.APIService;
 import com.example.api.Interface.IShopUpdate;
 import com.example.api.data.remote.RetrofitClient;
+import com.example.api.data.response.Movie;
 import com.example.api.data.response.MovieResponse;
 import com.example.api.model.ShopHTTP;
 import com.google.gson.Gson;
@@ -33,9 +42,12 @@ import retrofit2.Callback;
 public class MainActivity extends AppCompatActivity implements IShopUpdate {
     Button button;
     RecyclerView recyclerView;
+    List<Movie> movies;
     ShopAdapter shopAdapter;
     HttpAdapter httpAdapter;
+    private MovieAdapter.RecycleViewListen listen;
     MovieAdapter movieAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,18 +55,26 @@ public class MainActivity extends AppCompatActivity implements IShopUpdate {
         recyclerView = findViewById(R.id.rc_view);
         LinearLayoutManager layout = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(layout);
-
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                (new OkHTTP()).execute();
-//            }
-//        });
-//    }
-       update();
+        setOnClickListen();
+        update();
     }
-        @Override
-        public void update () {
+
+    private void setOnClickListen() {
+        listen = new MovieAdapter.RecycleViewListen() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent intent = new Intent(getApplicationContext(), MovieDetail.class);
+                startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("movie", movies.get(position));
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        };
+    }
+
+    @Override
+    public void update() {
 //            APIService apiService = RetrofitClient.getInstance().getAPIService();
 //            Call<List<ShopHTTP>> call =apiService.LIST_CALL();
 //            call.enqueue(new Callback<List<ShopHTTP>>() {
@@ -70,8 +90,8 @@ public class MainActivity extends AppCompatActivity implements IShopUpdate {
 //                    Log.e("App error", t.toString());
 //                }
 //            });
-            (new OkHTTP()).execute();
-        }
+        (new OkHTTP()).execute();
+    }
 
 //    private class HTTPReqTask extends AsyncTask<Void, Void, String> {
 //        @Override
@@ -124,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements IShopUpdate {
                 Response response = client.newCall(request).execute();
                 return response.body().string();
             } catch (Exception e) {
-            e.printStackTrace();
+                e.printStackTrace();
             }
             return "[]";
         }
@@ -134,9 +154,11 @@ public class MainActivity extends AppCompatActivity implements IShopUpdate {
             super.onPostExecute(data);
             Log.e("finish", "good");
             Gson gson = new Gson();
-            Type type1 = new TypeToken<MovieResponse>(){}.getType();
-            MovieResponse response = gson.fromJson(data,type1);
-            movieAdapter = new MovieAdapter(getApplicationContext(),response.movies, MainActivity.this);
+            Type type1 = new TypeToken<MovieResponse>() {
+            }.getType();
+            MovieResponse response = gson.fromJson(data, type1);
+            movies = response.movies;
+            movieAdapter = new MovieAdapter(getApplicationContext(), movies, MainActivity.this, listen);
             recyclerView.setAdapter(movieAdapter);
             movieAdapter.notifyDataSetChanged();
         }

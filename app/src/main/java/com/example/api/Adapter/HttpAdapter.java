@@ -86,12 +86,9 @@ public class HttpAdapter extends RecyclerView.Adapter<HttpAdapter.ViewHolder> {
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            Del = itemView.findViewById(R.id.btn_delete);
             Name = itemView.findViewById(R.id.tv_name_http);
             price = itemView.findViewById(R.id.tv_price_http);
             img = itemView.findViewById(R.id.img_avatar_http);
-
-
         }
     }
 }

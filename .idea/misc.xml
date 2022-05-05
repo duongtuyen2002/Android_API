@@ -4,9 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/kubjn/Documents/API/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/kubjn/Documents/API/app/src/main/res/layout/activity_moviedetail.xml" value="0.26875" />
+        <entry key="..\:/Users/kubjn/Documents/API/app/src/main/res/layout/activity_second.xml" value="0.26875" />
+        <entry key="..\:/Users/kubjn/Documents/API/app/src/main/res/layout/activity_splash.xml" value="0.26458333333333334" />
         <entry key="..\:/Users/kubjn/Documents/API/app/src/main/res/layout/dong_http.xml" value="0.22" />
         <entry key="..\:/Users/kubjn/Documents/API/app/src/main/res/layout/dong_shop.xml" value="0.25" />
         <entry key="..\:/Users/kubjn/Documents/API/app/src/main/res/layout/http_shop.xml" value="0.25" />
+        <entry key="..\:/Users/kubjn/Documents/API/app/src/main/res/layout/moviedetail.xml" value="0.26875" />
       </map>
     </option>
   </component>
