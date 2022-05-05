@@ -6,14 +6,15 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.api.Interface.IShopUpdate;
+import com.example.api.MainActivity;
 import com.example.api.R;
 import com.example.api.data.response.Movie;
 import com.squareup.picasso.Picasso;
@@ -21,16 +22,23 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
-
+    RecycleViewListen listen;
     Context context;
     List<Movie> movies;
     IShopUpdate iShopUpdate;
 
-    public MovieAdapter(Context context, List<Movie> movies, IShopUpdate iShopUpdate) {
+    public MovieAdapter(Context context, List<Movie> movies, IShopUpdate iShopUpdate, RecycleViewListen listen) {
         this.context = context;
         this.movies = movies;
         this.iShopUpdate = iShopUpdate;
+        this.listen = listen;
     }
+
+//    public MovieAdapter(Context context, List<Movie> movies, MainActivity iShopUpdate) {
+//        this.context = context;
+//        this.movies = movies;
+//        this.iShopUpdate = iShopUpdate;
+//    }
 
     @NonNull
     @Override
@@ -52,17 +60,24 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         return movies.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public interface RecycleViewListen{
+        void onClick(View v, int position);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView id, title;
         ImageView img;
-        Button Del;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            Del = itemView.findViewById(R.id.btn_delete);
             id = itemView.findViewById(R.id.tv_name_http);
             title = itemView.findViewById(R.id.tv_price_http);
             img = itemView.findViewById(R.id.img_avatar_http);
+            itemView.setOnClickListener(this);
+        }
 
+        @Override
+        public void onClick(View view) {
+            listen.onClick(view, getAdapterPosition());
         }
     }
 }
