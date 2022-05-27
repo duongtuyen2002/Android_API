@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,18 +21,23 @@ import android.widget.Button;
 import com.example.api.Adapter.HttpAdapter;
 import com.example.api.Adapter.MovieAdapter;
 import com.example.api.Adapter.ShopAdapter;
+import com.example.api.Adapter.SlideAdapter;
 import com.example.api.data.remote.APIService;
 import com.example.api.Interface.IShopUpdate;
 import com.example.api.data.remote.RetrofitClient;
 import com.example.api.data.response.Movie;
 import com.example.api.data.response.MovieResponse;
 import com.example.api.model.ShopHTTP;
+import com.example.api.model.Slide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import static com.example.api.Untils.Config.*;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -42,7 +48,9 @@ import retrofit2.Callback;
 public class MainActivity extends AppCompatActivity implements IShopUpdate {
     Button button;
     RecyclerView recyclerView;
+    private List<Slide> Slides ;
     List<Movie> movies;
+    private ViewPager slidepager;
     ShopAdapter shopAdapter;
     HttpAdapter httpAdapter;
     private MovieAdapter.RecycleViewListen listen;
@@ -55,6 +63,17 @@ public class MainActivity extends AppCompatActivity implements IShopUpdate {
         recyclerView = findViewById(R.id.rc_view);
         LinearLayoutManager layout = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(layout);
+        Slides = new ArrayList<>();
+        Slides.add(new Slide(R.drawable.a1));
+        Slides.add(new Slide(R.drawable.a2));
+        Slides.add(new Slide(R.drawable.a3));
+
+        slidepager = findViewById(R.id.slide_img);
+        SlideAdapter adapter = new SlideAdapter(this,Slides);
+        slidepager.setAdapter(adapter);
+
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new SliderTimer(),3000,4000);
         setOnClickListen();
         update();
     }
@@ -161,6 +180,23 @@ public class MainActivity extends AppCompatActivity implements IShopUpdate {
             movieAdapter = new MovieAdapter(getApplicationContext(), movies, MainActivity.this, listen);
             recyclerView.setAdapter(movieAdapter);
             movieAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private class SliderTimer extends TimerTask {
+        @Override
+        public void run() {
+
+            MainActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (slidepager.getCurrentItem() < Slides.size() -1) {
+                        slidepager.setCurrentItem(slidepager.getCurrentItem() +1);
+                    }
+                    else
+                        slidepager.setCurrentItem(0);
+                }
+            });
         }
     }
 

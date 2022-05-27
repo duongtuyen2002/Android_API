@@ -7,10 +7,17 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/slide.img"
+        android:layout_width="match_parent"
+        android:layout_height="270dp" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rc_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/slide.img"
+        android:layout_marginTop="10dp"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="49dp" />
 

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,16 +19,15 @@ import com.squareup.picasso.Picasso;
 
 public class MovieDetail extends AppCompatActivity {
 
-    ImageView img_anh;
-    TextView tvid,tvname,tvdate,tvover;
+    ImageView img_anh, img_anhto;
+    TextView tvname,tvdate,tvover;
     ImageButton img_bt_back;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.moviedetail);
+        setContentView(R.layout.movie_detail);
 
-        tvid = findViewById(R.id.textViewidd);
         tvname = findViewById(R.id.textViewtitlee);
         tvdate = findViewById(R.id.textViewdatee);
         tvover = findViewById(R.id.textViewoverview);
@@ -47,13 +47,13 @@ public class MovieDetail extends AppCompatActivity {
             return;
         }
         Movie mMovie = (Movie) bundle.get("movie");
-        tvid.setText("Id : "+ mMovie.id + "");
         tvname.setText("Title : "+mMovie.title);
         tvdate.setText("Date : "+mMovie.release_date);
         tvover.setText("OverView : "+mMovie.overview);
-
 //        holder.tvOverView.setText(mMovie.overview);
 //        holder.tvCreate.setText(mMovie.createdAt);
         Picasso.with(getApplicationContext()).load(BASE_BACKDROP_PATH + mMovie.backdropPath).into(img_anh);
+//        img_anhto.setAnimation(AnimationUtils.loadAnimation(this,R.anim.scale_animation));
+
     }
 }
