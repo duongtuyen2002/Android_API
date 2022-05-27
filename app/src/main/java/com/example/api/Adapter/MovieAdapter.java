@@ -50,7 +50,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull MovieAdapter.ViewHolder holder, int position) {
         Movie movie = movies.get(position);
-        holder.id.setText(movie.id +"");
+        holder.date.setText(movie.release_date);
         holder.title.setText(movie.title);
         Picasso.with(context).load(BASE_BACKDROP_PATH  + movie.backdropPath).into(holder.img);
     }
@@ -65,11 +65,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView id, title;
+        TextView date, title;
         ImageView img;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            id = itemView.findViewById(R.id.tv_name_http);
+            date = itemView.findViewById(R.id.tv_name_http);
             title = itemView.findViewById(R.id.tv_price_http);
             img = itemView.findViewById(R.id.img_avatar_http);
             itemView.setOnClickListener(this);

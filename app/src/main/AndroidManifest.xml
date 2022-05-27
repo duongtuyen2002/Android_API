@@ -14,10 +14,11 @@
         android:theme="@style/Theme.API">
         <activity
             android:name=".MainActivity"
-            android:label="Splash"/>
+            android:label="Movie"/>
         <activity
             android:name=".MovieDetail"
             android:exported="false" />
+
         <activity
             android:name=".Splash"
             android:exported="true">
